@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SSD OAuth 2.0</title>
+<link rel="stylesheet" href="bootstrap.min.css">
+<style media="screen">
+	h5{
+		margin-left:39%;
+	}
+	
+	
+	h6{
+		margin-left:40%;
+	}
+
+	#fb-btn{
+		margin-left:44%;
+	}
+	
+	#ppic{
+		margin-top:-160px;
+	}
+	
+	#profile,loutbtn{
+		display:none;
+	}
+	
+	#welcome{
+		margin-left:46.5%;
+	}
+
+	#welcome2{
+		margin-left:41.5%;
+	}	
+	#cty{
+		margin-left:46.5%;
+	}
+	
+	#loutbtn{
+		font-size:22px;
+	}
+	
+	
+	a{
+		color:white;
+	}
+	
+	a:hover {
+		color: #7FFFD4;
+	}
+	
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 20%;
+  border-radius: 50%;
+}
+
+img.avatar2 {
+  width: 10%;
+  border-radius: 50%;
+}
+
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '460192984574990',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v4.0'
+    });
+      
+    FB.getLoginStatus(function(response) {
+		statusChangeCallback(response);
+	}); 
+      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+   
+   function statusChangeCallback(response){
+	if(response.status === 'connected'){
+			console.log('Logged in and authenticated');
+			setElements(true);
+			testAPI();
+		}
+	else{
+		console.log('Not authenticated')
+		setElements(false);
+	}
+   }
+   
+   function checkLoginState() {
+		FB.getLoginStatus(function(response) {
+			statusChangeCallback(response);
+		});
+	}
+	
+	function testAPI(){
+		FB.api('/me?fields=name,email,picture.width(200).height(200),location',function(response){
+			if(response && !response.error){
+				console.log(response);
+				buildProfile(response);
+			}
+		})
+	}
+	
+	function buildProfile(user){
+		let profile = `
+		<div class="imgcontainer" id="imgppic">
+			<img src=${user.picture.data.url} alt="Avatar" class="avatar2" id="ppic">
+			</div>
+			<div>
+				<h4 id="welcome">WELCOME</h4>
+				<h2 id="welcome2"><b>${user.name}</b></h2>
+				<h6 id="cty"><b>${user.location.name}</b></h6><br/>
+				
+			</div>
+		`;
+		
+		document.getElementById('profile').innerHTML = profile;
+	}
+	
+
+	function setElements(isLoggedIn) {
+		if(isLoggedIn){
+			document.getElementById('profile').style.display='block';
+			document.getElementById('loutbtn').style.display='block';
+			document.getElementById('fb-btn').style.display='none';
+			document.getElementById('heading').style.display='none';
+			document.getElementById('imgppic').style.display='none';
+		}
+		else{
+			document.getElementById('profile').style.display='none';
+			document.getElementById('loutbtn').style.display='none';
+			document.getElementById('fb-btn').style.display='block';
+			document.getElementById('heading').style.display='block';
+			document.getElementById('imgppic').style.display='block';
+		
+		}
+	}
+	
+	 function logout() {
+		FB.logout(function(response) {
+			setElements(false);
+		});
+	}
+
+</script>
+
+ <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand" href="#"><b>SSD OAuth 2.0</b></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+	
+	<ul class="navbar-nav navbar-right">
+      <li class="nav-item active" id="loutbtn">
+        <a href="#" onclick="logout()">Logout</a>
+      </li>
+    </ul>
+		
+   
+  </div>
+</nav>
+
+<div class="container" style="align:center" id="fbbtn">
+	  <div class="imgcontainer" id="imgppic">
+		<img src="user3.png" alt="Avatar" class="avatar">
+	  </div>
+
+	  <br/>
+	  <div id="heading">
+		<h4>click below fb button to login</h4>
+		</div>
+		<br/>
+		<br/>
+		<br/>
+		
+		<div>
+			<fb:login-button
+				id="fb-btn"
+				size="xlarge"
+				scope="public_profile,email,user_location"
+				onlogin="checkLoginState();">
+			</fb:login-button>
+		</div>
+
+		<br/>
+		<br/>
+		<br/>
+</div>
+<div id="profile">
+
+</div>
+
+</body>
+
+</html>
